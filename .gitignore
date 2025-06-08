@@ -58,3 +58,6 @@ dkms.conf
 */usr/*
 
 **/bin/*
+
+# VS code settings
+.vscode
