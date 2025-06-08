@@ -39,16 +39,16 @@ rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 # Generate a list of folders to be included
 INCLUDELIST := $(foreach dir, $(EXTFOLDER), -I$(dir))
 # Generate a list of source code files relative of the source folder
-CLIST       :=  $(call rwildcard,$(SRCFOLDER),*.c)
+CLIST       :=  $(call rwildcard,$(SRCFOLDER),*.cpp)
 # Generate a list of library files
-EXTLIST     := $(foreach dir, $(EXTFOLDER), $(call rwildcard,$(dir),*.c))
+EXTLIST     := $(foreach dir, $(EXTFOLDER), $(call rwildcard,$(dir),*.cpp))
 # Generate a list of object files
-OBJLIST     := $(patsubst %.c, %.o, $(CLIST)) $(patsubst %.c, %.o, $(EXTLIST))
+OBJLIST     := $(patsubst %.cpp, %.o, $(CLIST)) $(patsubst %.cpp, %.o, $(EXTLIST))
 # Generate a list of object files in the object(sub)folder
 OBJLIST2    := $(foreach file, $(OBJLIST), $(OBJFOLDER)$(file))
 
 # Define all tools with standard settings
-TOOLC     = gcc $(CFLAGS) 
+TOOLC     = g++ $(CFLAGS) 
 TOOLDUMP  = objdump
 
 # Public goals
@@ -124,30 +124,7 @@ _compiler:
 	@echo "_________________________________"
 	@echo "  > Start compiler"
 
-%.o: %.c
+%.o: %.cpp
 	@mkdir -p $(OBJFOLDER)$(dir $@)
 	@echo "  > make object files"
 	$(TOOLC) $(INCLUDELIST) -c -o $(OBJFOLDER)$@ $<
-
-# Create a release 
-release: _debian _end
-
-_debian: _debian1 $(BINFOLDER)$(PROJECTNAME) _debian2 
-
-_debian1:
-	@echo "  > Goal: Prepare the build system to create a debian release package"
-	mkdir -p $(PROJECTNAME)/DEBIAN
-	@echo "  > Goal: Compile the project with release settings"
-	$(eval CFLAGS += -DRELEASE)
-
-_debian2:
-	@echo "  > Goal: Create a debian release package"
-	mkdir -p $(PROJECTNAME)/$(BINARYLOCATION)
-	cp $(BINFOLDER)$(PROJECTNAME) $(PROJECTNAME)/$(BINARYLOCATION)$(PROJECTNAME)
-	dpkg-deb --build $(PROJECTNAME) $(PROJECTNAME).deb
-
-# _rpm: _rpm1 $(BINFOLDER)$(PROJECTNAME) _rpm2 
-
-# _rpm1:
-
-# _rpm2:
