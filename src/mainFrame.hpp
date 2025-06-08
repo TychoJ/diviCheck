@@ -16,9 +16,14 @@
 * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#ifndef MAIN_FRAME_H_
+#define MAIN_FRAME_H_
+
 #include <wx/wx.h>
 
 class MainFrame : public wxFrame {
 public:
     MainFrame();
 };
+
+#endif // MAIN_FRAME_H_
