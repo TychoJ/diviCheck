@@ -46,14 +46,14 @@ BINARYLOCATION = usr/local/bin/
 # External source code library folders
 EXTFOLDER =
 
-# GTK libs
-GTKLIB = `pkg-config --cflags gtk4` `pkg-config --libs gtk4`
+# wxWidgets libs
+WXWIDGETSLIB = `wx-config --cxxflags --libs std`
 
 # Compiler flags
-CFLAGS = -Wall -std=c17 -lm $(GTKLIB)
+CFLAGS = -Wall $(WXWIDGETSLIB)
 
 # Linker flags
-LDFLAGS = $(GTKLIB) #-export-dynamic
+LDFLAGS = -export-dynamic $(WXWIDGETSLIB)
 
 # Execute the configurations
 include make.mk
