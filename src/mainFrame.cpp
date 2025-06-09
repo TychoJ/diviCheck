@@ -17,10 +17,25 @@
 */
 
 #include <wx/wx.h>
+#include <wx/splitter.h>
 #include "mainFrame.hpp"
 
-MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, "diviCheck") { 
+MainFrame::MainFrame() : wxFrame(nullptr, wxID_ANY, "diviCheck", wxDefaultPosition, wxDefaultSize) { 
     CreateStatusBar();
-    // SetStatusText("Welcome to wxWidgets!");
+    SetStatusText("Welcome to diviCheck!");
 
+
+    wxSplitterWindow *settingsSplitter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_BORDER | wxSP_LIVE_UPDATE);
+    wxSplitterWindow *commandsSplitter = new wxSplitterWindow(settingsSplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_BORDER | wxSP_LIVE_UPDATE);
+
+    wxPanel *panelLeft   = new wxPanel(settingsSplitter);
+    wxPanel *panelRight  = new wxPanel(commandsSplitter);
+    wxPanel *panelBottom = new wxPanel(commandsSplitter);
+    
+    commandsSplitter->SetMinimumPaneSize(100);
+    commandsSplitter->SplitHorizontally(panelRight, panelBottom);
+    commandsSplitter->SetSashGravity(1.0);
+    
+    settingsSplitter->SetMinimumPaneSize(200);
+    settingsSplitter->SplitVertically(panelLeft, commandsSplitter);
 }
